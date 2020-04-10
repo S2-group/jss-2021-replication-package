@@ -1,8 +1,8 @@
 # ICSE SEIP 2020 – Replication package
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3672050.svg)](https://doi.org/10.5281/zenodo.3672050)
+Replication package of the paper titled "An Empirically-grounded Guide for Architecting ROS-based Systems" submitted to the Special Issue on Software Engineering in Practice (2020) - Journal of Software: Practice and Experience
 
-This repository contains the replication package and dataset of the paper published at ICSE 2020 (SEIP track) with the title **How do you Architect your Robots? State of the Practice and Guidelines for ROS-based Systems**.
+This repository contains the replication package and dataset of the paper submitted to the Journal of Software: Practice and Experience with the title **An Empirically-grounded Guide for Architecting ROS-based Systems**.
 
 This study has been designed, developed, and reported by the following investigators:
 
@@ -19,15 +19,7 @@ The full dataset including raw data, mining scripts, and analysis scripts produc
 If the dataset is helping your research, consider to cite it is as follows, thanks!
 
 ```
-@inproceedings{ICSE_SEIP_2020,
-  title={{How do you Architect your Robots? State of the Practice and Guidelines for ROS-based Systems}},
-  author={Ivano Malavolta and Grace Lewis and Bradley Schmerl and Patricia Lago and David Garlan},
-  booktitle = {Proceedings of the 42nd ACM/IEEE International Conference on Software Engineering},
-  year = {2020},
-  pages = {to appear},
-  numpages = {10},
-  url = {http://www.ivanomalavolta.com/files/papers/ICSE_SEIP_2020.pdf}
-}
+TBD
 ```
 
 ### Overview of the replication package
