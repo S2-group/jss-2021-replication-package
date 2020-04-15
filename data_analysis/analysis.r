@@ -8,7 +8,8 @@ library(likert)
 library(stringr)
 library(stringi)
 library(R.utils)
-library(here)
+
+setwd('.')
 
 loadfonts()
 options(max.print=100)
@@ -24,10 +25,36 @@ cv <- function(data, percentage){
   return(result)
 }
 
-repos = read.csv(here("dataset", "repos_dataset_selected.csv"), na.strings=c("","NA"))
-survey_responses = read.csv(here("online_questionnaire", "online_questionnaire_responses_raw.csv"), na.strings=c("","NA"))
-guidelines = read.csv(here("data_analysis", "guidelines_definitions.csv"), na.strings=c("","NA"))
-survey_responses_coded = read.csv(here("online_questionnaire", "online_questionnaire_responses.csv"), na.strings=c("","NA"))
+repos = read.csv("Repos - Repos_SELECTED.csv", na.strings=c("","NA"))
+survey_responses = read.csv("Architecting ROS-based systems - survey (Responses) - Form responses 1.csv", na.strings=c("","NA"))
+guidelines = read.csv("Guidelines - Guidelines definition.csv", na.strings=c("","NA"))
+survey_responses_coded = read.csv("Guidelines - Survey responses.csv", na.strings=c("","NA"))
+repos_sa_analysis = read.csv("Repos - Repos_SA_ANALYSIS.csv", na.strings=c("","NA"))
+
+# We rename the columns of Repos_SA_ANALYSIS to more meaningful names
+repos_sa_analysis = repos_sa_analysis %>% 
+  rename(
+    Nodes = SA.View.Elements,
+    Topics = X,
+    Messages = X.1,
+    Services = X.2,
+    Parameters = X.3,
+    Packages = X.4,
+    ExternalSystemElements = X.5,
+    ROSLibraries = X.6,
+    OtherSoftwareComponents = X.7
+  )
+
+# We remove the all rows of Repos_SA_ANALYSIS without a repo ID because they does not contain any specific information (e.g., they contain only partial counts we checked in GDrive)
+# repos_sa_analysis = repos_sa_analysis[-1,]
+repos_sa_analysis = repos_sa_analysis[!is.na(repos_sa_analysis$ID),]
+
+# Reshape the part of dataframe related to the View elements
+repos_sa_analysis_long = repos_sa_analysis %>% gather(ViewElements, value, Nodes, Topics, Messages, Services, Parameters, Packages, ExternalSystemElements, ROSLibraries, OtherSoftwareComponents)
+repos_sa_analysis_long = repos_sa_analysis_long[repos_sa_analysis_long$value == TRUE,] %>% select(-value)
+repos_sa_analysis_long$ViewElements = gsub("OtherSoftwareComponents", "Other Software\nComponents", repos_sa_analysis_long$ViewElements)
+repos_sa_analysis_long$ViewElements = gsub("ExternalSystemElements", "External System\nElements", repos_sa_analysis_long$ViewElements)
+repos_sa_analysis_long$ViewElements = gsub("ROSLibraries", "ROS Libraries", repos_sa_analysis_long$ViewElements)
 
 # We separate the guidelines column into multiple columns and then transform the df into the long format
 guidelines = guidelines %>% 
@@ -60,7 +87,7 @@ guidelines_long <- guidelines %>% gather(Column_name, quality_attributes, qualit
 survey_responses_coded_long <- survey_responses_coded %>% gather(Column_name, quality_attributes, quality_attributes_1, quality_attributes_2, quality_attributes_3) %>% select(-Column_name)
 
 # Rename values so that they are more meaningful in the plots
-repos_long_system_type = repos_long_system_type %>% mutate(System.type = fct_recode(System.type, "Generic" = "GEN", "Manipulation" = "Manu", "Service" = "Service", "Self-driving vehicle" = "Selfdriving_car"))
+repos_long_system_type = repos_long_system_type %>% mutate(System.type = fct_recode(System.type, "Generic" = "GEN", "Manipulation" = "Manu", "Service" = "Service", "Self-driving\nvehicle" = "Selfdriving_car"))
 repos = repos %>% mutate(Scope = fct_recode(Scope, "Full system" = "FULL_SYSTEM", "Subsystem" = "SUBSYSTEM"))
 repos_long_capabilities = repos_long_capabilities %>% mutate(Capability = fct_recode(Capability, "Infrastructure" = "Infrastructural", "Dev. support" = "DevSupport", "SLAM" = "Slam")) %>% subset(Capability != "FULL")
 repos = repos %>% mutate(SA.documented = fct_recode(SA.documented, "No" = "NO", "Partially" = "PARTIALLY", "Yes" = "YES"))
@@ -78,7 +105,7 @@ for (i in c(start_index:end_index)) {
 }
 colnames(survey_responses) <- colname
 
-plot = function(df, var_name, file_name, highlighted_var, max_scale, height) {
+plot = function(df, var_name, file_name, highlighted_var, max_scale, width, height) {
   
   df_local = df %>% drop_na(var_name)
   df_local = df_local %>% mutate(highlight_flag = ifelse(df_local[[var_name]] == highlighted_var, T, F))
@@ -96,8 +123,28 @@ plot = function(df, var_name, file_name, highlighted_var, max_scale, height) {
     theme(axis.text=element_text(size=fontSize), axis.title=element_text(size=fontSize)) +
     theme(plot.margin=grid::unit(c(1, 1, 1, -4), "mm"))
   
-  # ggsave(file_name, scale = 1.5, width = 40, height = height, unit = "mm")
-  ggsave(file_name, scale = 0.55, height = 13, unit = "cm")
+  ggsave(file_name, scale = 0.55, width = width, height = height, unit = "cm")
+}
+
+plot_stacked = function(df, var1_name, var2_name, file_name, max_scale, width, height) {
+  
+  df_local = df
+  
+  ggplot(repos_sa_analysis, aes(df_local[[var1_name]], fill = df_local[[var2_name]])) + geom_bar() +
+    xlab("") + ylab("") +
+    ylim(0, max_scale) +
+    annotate("text", x = 1, y=25, label = "23") +
+    annotate("text", x = 2, y=27, label = "25") +
+    annotate("text", x = 3, y=22, label = "20") +
+    theme_bw() +
+    theme(legend.direction="vertical", legend.title = element_blank(), legend.text=element_text(size=8), legend.position = "right", legend.background = element_rect(fill=alpha('blue', 0))) +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+    theme(axis.text=element_text(size=fontSize), axis.title=element_text(size=fontSize)) +
+    # geom_text(aes( label = ..count..,
+    #                y= ..count.. ), stat= "count", position = position_stack(vjust = 0.5), size=2) +
+    theme(plot.margin=grid::unit(c(1, 1, 1, -4), "mm"))
+  
+  ggsave(file_name, scale = 0.55, width = width, height = height, unit = "cm")
 }
 
 plot_responses = function(file_name, data) {
@@ -107,8 +154,8 @@ plot_responses = function(file_name, data) {
     theme_bw() +
     labs(y = "") +
     theme(plot.margin=grid::unit(c(1, 0, 1, 1), "mm")) + 
-    theme(legend.position="bottom", legend.direction="horizontal", legend.text=element_text(size=8)) +
-    guides(fill=guide_legend(nrow=2,byrow=TRUE, reverse = TRUE, keyheight=unit(0.2,"cm"))) +
+    theme(legend.direction="vertical", legend.text=element_text(size=8), legend.position = c(0.2, 0.1), legend.background = element_rect(fill=alpha('blue', 0))) +
+    guides(fill=guide_legend(nrow=5,byrow=TRUE, reverse = TRUE, keyheight=unit(0.1,"cm"))) +
     theme(axis.text=element_text(size=fontSize), axis.title=element_text(size=fontSize))
     
   ggsave(file_name, scale = 1.5, width = 8, unit = "cm")
@@ -124,7 +171,6 @@ add_zero = function(x) {
 }
 
 gen_guidelines_table = function() {
-  # N1 & GUIDELINE & M, I, S, S & adadsada/asdasdasda & D & 15 \\
   guidelines$Final.ID = as.character(guidelines$Final.ID)
   guidelines$Final.ID = sapply(guidelines$Final.ID, add_zero) 
   order <- c('C', 'N', 'B', 'I', 'H', 'S', 'P')
@@ -138,12 +184,12 @@ gen_guidelines_table = function() {
   }
 }
 
-plot(repos_long_system_type, 'System.type', here('output', 'SystemType.pdf'), 'Generic', 100, 13)
-plot(repos, 'Scope', here('output', 'Scope.pdf'), '', 250, 35)
-plot(repos_long_capabilities, 'Capability', here('output', 'Capabilities.pdf'), '', 55, 13)
-plot(repos, 'SA.documented', here('output', 'SA_documented.pdf'), '', 250, 35)
-plot(guidelines_long, 'quality_attributes', here('output', 'quality_attribute_mentioned.pdf'), '', 25, 13)
-plot(survey_responses_coded_long, 'quality_attributes', here('output', 'quality_attribute_considered.pdf'), '', 55, 13)
+plot(repos_long_system_type, 'System.type', './output/SystemType.pdf', 'Generic', 100, 15, 13)
+plot(repos, 'Scope', './output/Scope.pdf', '', 250, 4, 13)
+plot(repos_long_capabilities, 'Capability', './output/Capabilities.pdf', '', 55, 15, 13)
+plot(repos, 'SA.documented', './output/SA_documented.pdf', '', 250, 6, 13)
+plot(guidelines_long, 'quality_attributes', './output/quality_attribute_mentioned.pdf', '', 25, 15, 13)
+plot(survey_responses_coded_long, 'quality_attributes', './output/quality_attribute_considered.pdf', '', 55, 15, 13)
 
 data = survey_responses %>% select(matches("G[1-9]+"))
 
@@ -155,12 +201,13 @@ data <- data %>% rename_all(funs( pairs$Final.ID ))
 col_order <- c('C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'N8', 'B1', 'B2', 'B3', 'B4', 'I1', 'I2', 'I3', 'I4', 'I5', 'H1', 'H2', 'H3', 'H4', 'H5', 'S1', 'S2', 'S3', 'S4', 'P1', 'P2', 'P3')
 data <- data[, col_order]
 data <- data %>% na_if("Don't know")
-plot_responses(here('output', 'guidelines_usefulness.pdf'), data)
+plot_responses('./output/guidelines_usefulness.pdf', data)
 
 # gen_guidelines_table()
 
-
-
-
+plot(repos_sa_analysis, 'SA.View.Depiction', './output/SA_View_Depiction.pdf', '', max(summary(repos_sa_analysis$SA.View.Depiction)) + 5, 7, 13)
+plot(repos_sa_analysis, 'SA.View.Type', './output/SA_View_Type.pdf', '', max(summary(repos_sa_analysis$SA.View.Type)) + 5, 12, 13)
+plot(repos_sa_analysis_long, 'ViewElements', './output/SA_View_Elements.pdf', '', max(summary(as.factor(repos_sa_analysis_long$ViewElements))) + 5, 15, 13)
+plot_stacked(repos_sa_analysis, 'SA.View.Depiction', 'SA.View.Type', './output/SA_Stacked.pdf', max(summary(repos_sa_analysis$SA.View.Depiction)) + 5, 20, 13)
 
 
