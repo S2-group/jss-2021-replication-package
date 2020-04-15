@@ -25,11 +25,11 @@ cv <- function(data, percentage){
   return(result)
 }
 
-repos = read.csv("Repos - Repos_SELECTED.csv", na.strings=c("","NA"))
-survey_responses = read.csv("Architecting ROS-based systems - survey (Responses) - Form responses 1.csv", na.strings=c("","NA"))
-guidelines = read.csv("Guidelines - Guidelines definition.csv", na.strings=c("","NA"))
-survey_responses_coded = read.csv("Guidelines - Survey responses.csv", na.strings=c("","NA"))
-repos_sa_analysis = read.csv("Repos - Repos_SA_ANALYSIS.csv", na.strings=c("","NA"))
+repos = read.csv(here("dataset", "repos_dataset_selected.csv"), na.strings=c("","NA"))
+survey_responses = read.csv(here("online_questionnaire", "online_questionnaire_responses_raw.csv"), na.strings=c("","NA"))
+guidelines = read.csv(here("data_analysis", "guidelines_definitions.csv"), na.strings=c("","NA"))
+survey_responses_coded = read.csv(here("online_questionnaire", "online_questionnaire_responses.csv"), na.strings=c("","NA"))
+survey_responses_coded = read.csv(here("data_analysis", "repos_sa_analysis.csv"), na.strings=c("","NA"))
 
 # We rename the columns of Repos_SA_ANALYSIS to more meaningful names
 repos_sa_analysis = repos_sa_analysis %>% 
