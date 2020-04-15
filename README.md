@@ -36,7 +36,7 @@ malavolta
     |
     |--- online_questionnaire/   	List of contacted participants, script for contacting all participants via email, raw data of the responses, transcript of the on-line questionnaire.
     |
-    |--- ICSE_SEIP_2020.pdf             A copy of the paper in pdf format
+    |--- ICSE_SEIP_2020.pdf             A copy of the preliminary paper published at ICSE 2020
 ```
 
 Each of the folders listed above are described in details in the remaining of this readme.
