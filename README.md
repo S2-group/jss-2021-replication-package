@@ -2,7 +2,7 @@
 
 Replication package of the paper titled "An Empirically-grounded Guide for Architecting ROS-based Systems" submitted to the Special Issue on Software Engineering in Practice (2020) - Journal of Software: Practice and Experience
 
-This repository contains the replication package and dataset of the paper submitted to the Journal of Software: Practice and Experience with the title **An Empirically-grounded Guide for Architecting ROS-based Systems**.
+This repository contains the replication package and dataset of the paper submitted to the Journal of Software: Practice and Experience with the title **Empirical Guidelines for Architecting ROS-based Systems**.
 
 This study has been designed, developed, and reported by the following investigators:
 
