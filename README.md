@@ -1,8 +1,6 @@
-# ICSE SEIP 2020 – Replication package
+# JSS 2020 – Replication package
 
-Replication package of the paper titled "An Empirically-grounded Guide for Architecting ROS-based Systems" submitted to the Special Issue on Software Engineering in Practice (2020) - Journal of Software: Practice and Experience
-
-This repository contains the replication package and dataset of the paper submitted to the Journal of Software: Practice and Experience with the title **Empirical Guidelines for Architecting ROS-based Systems**.
+Replication package of the paper titled "Mining Guidelines for Architecting Robotics Software" submitted to the International Journal of Systems and Software.
 
 This study has been designed, developed, and reported by the following investigators:
 
