@@ -1,0 +1,192 @@
+ID,Final ID,Guideline,Codes
+G30,B1,"The behavior of each node should follow a well-defined lifecyle, which should be queryable and updatable at run-time","[query behaviour]
+[scoring node with life cycle]
+[stop if no new messages]
+[nodes should document their interfaces]"
+G20,B2,Nodes with high-frequency operations should be configurable so that they can operate according to available computational resources,"[throttled nodes based on cpu]
+[tune rate based on cpu]"
+G31,B3,"If a node is stateful and its behavior strongly depends on the time and order of arrival of messages, specify the protocol of the messages expected by the node","[well structured messages and interfaces]
+[Specify the protocol of the messages you expect]"
+G32,B4,"When possible, ROS nodes should be stateless and their behaviour should not depend on previous operations or received messages",[nodes can manage data in any order and out of sync - they are stateless]
+G42,B5,Nodes with configuration errors should fail explicitly at bringup time,[early failure on misconfiguration]
+G44,B6,"If a node is computationally expensive, then ensure that it only executes when some other nodes are subscribing to a topic it publishes to (unless topic latching is enabled).","[expensive nodes only with subscribers]
+[un/subscribe only when there are (no) publishing nodes]"
+G17,C1,"Use standardized ROS message formats, possibly supporting also their legacy versions ","[well structured/clear message types]
+[encourage standard messages]
+[support legacy std messages]
+[use std messages for compatibility]
+[std ros messages]
+[substitute with same action]
+[implement same interface]
+[common ros interfaces]
+[follow standards and conventions]"
+G11,C10,Publish empty messages when triggering atomic actions,[empty messages for triggering actions]
+G41,C11,Frequent messages should be exchanged either via services with persistent connections or via topic-based communication  ,"[frequent calls with persistent connections]
+[init publishers at startup of the node]"
+G45,C12,Use nodelets when the overhead due to inter-process communication is too high both in terms of frequency of messages and payload.  ,"[nodelets for large msgs]
+[no nodelets, consider IPC]"
+G46,C13,Manage topics to avoid unnecessary publishing and subscribing.,"[pub/sub only when there are subscribers/publishers]
+"
+G38,C2,"ROS nodes should be agnostic of the underlying communication mechanisms (e.g., network protocols, deployment topology, etc.) ","[versatile concept of robot communication]
+[gateway discovery]
+[flip network interfaces]
+[abstraction on the underlying communication mechanisms]
+[work transparently wrt communication layer]"
+G23,C3,"Include data- and node-health information in messages containing critical data (e.g., strength of GPS signal)","[interpolated data]
+[diagnostic aggregator node]
+[recovery actions from diagnostics]
+[gps signal health]
+[status response message]
+[multiple echo messages]
+[ekf for compensating inaccurate sensors]
+[diagnostics data for hw]"
+G19,C4,"If the system is remotely distributed, constantly observe the status of the communication channels, hosts, and machines on the network ","[quality of network connection statistics]
+[info about hosts and nodes in the network]
+problems with low bandwidth networks]
+[ping network for checking drops]"
+G12,C5,Nodes that potentially produce/consume large amounts of messages should be configurable in terms of their publish/subscribe rates  ,"[throttle stereo data]
+[driver working at different rates]
+[selective publishing of states, with different rates]
+[avoid large proc spikes]"
+G13,C6,Selectively limit the data exchanged between nodes to provide only the information that is strictly necessary for completing tasks ,"[selective telemetry data]
+[exclude data from sensor]
+[incremental updates of map]"
+G28,C7,"If different types of data are always sent/received together and must be synchronized, then either package them into a single message or subscribe to them using a time synchronizer filter ","[aggregated message]
+[synchronized messages]
+[sync sub for data sent together]"
+G5,C8,"Take into account that the data exchanged between nodes of the system may not be fully compatible (semantically), incorrect, out-of-order, or redundant","[data slightly outside the expected values]
+[incoming signal quality]
+[nodes resilient to errors and other triggers]
+[delete old/invalid points]
+[free to choose sampling time]
+[called when necessary]
+[configure/manage types of connections]
+[data not required to be synchronized]
+[data out of order]
+[tracking and filtering]
+[react when values arrive outside the expected threshold]"
+G24,C9,"Use services when starting up robots, instead of publishing to topics",[service for robots startup]
+G16,H1,Nodes interacting with simulation or physical platforms should implement identical ROS messaging interfaces,"[hw interface]
+[swap simulated and real hw components]
+[identical interface for sim and phys]
+[data from real robots as well as sim]
+[use ros time in simulation]"
+G2,H2,"When possible, design the system to be hardware-independent","[robot models in the parameter server, not hardcoded]
+[planners are abstract]
+[different kinds of sensor inputs via plugins]
+[no editing of the board control logic]
+[hardware abstraction]
+[transfer among various hardware platforms]
+[layer for mapping hardware to robot joints]
+[facilitate adding new hardware]
+[robot platform agnostic]
+[adapter for the robot controller]
+[layers for flexibility]"
+G3,H3,Decouple ROS nodes from variations in the execution environment,"[params for specific configurations]
+[deal with multiple OS and platforms]
+[expose only configuration options]
+[generic tasks loaded via configuration files]
+[launch file corresponding to functionalities]
+[server with appropriate loader]
+[new parameter server for configurations]
+[external parameters in a file]
+[easy to set up deployment]"
+G21,H4,State estimation nodes should support an arbitrary number and different types of sensors,"[different types of sensors]
+[fusion of multiple sensors for state estimantion]
+[fuse gps and imu via KF]"
+G8,H5,"If context-specific (hardware) configuration is needed, then load it at bringup time","[capability server loaded at the beginning]
+[retrieve all plugins at the beginning]
+[load controllers at startup]"
+G34,I1,"Assign meaningful names to architectural elements (e.g., nodes, topics, messages, services) and group them by adopting standard prefixes/suffixes","[names as unique ids]
+[tf_prefix as namespacing method]
+[use logical names]
+[namespace for behaviours]
+[conventions for naming, CI, and testing]
+[tf frame names as parameters, local topic names]
+[maintainable packages for reuse]"
+G35,I2,"When possible, core algorithms, libraries, and other generic software components should be ROS-agnostic","[core elements are ros-agnostic]
+[unit test for ros-specific and generic code separated]"
+G1,I3,Expose a single ROS node with interfaces for third-party users for the most common use cases  ,"[single interface]
+[integrator for external use]
+[use ros bridge] [expose only one node]
+[expose only one node]
+[integrator for external use]
+[single interface]"
+G26,I4,"Systems interacting with other non-ROS systems should provide two types of interfaces: a ROS-independent interface for non-ROS systems and a ROS-based interface for ROS tools  (e.g., Rviz, Qt)","[two modalities: ros vs non-ros]
+[secondary non-ros interface]"
+G4,I5,"Identify variation points of the system in advance, and design the system so that it can be extended by third-party users without modifying its core nodes  ","[separate plugins]
+[driver automatically configured, extensibility]
+[routing data with as little wrapping and patching as possible]
+[dynamic plugins]
+[no modification when adding a new feature]
+[dealing with various platforms]
+[robots agnostic of apps]
+[replaced at launch or run time]
+[extensible framework]
+[plugin-based architecture]
+[set of unified interfaces to layer above, common API]
+[common interface for comm]
+[modifications during operation]"
+G49,I6,Logging usage should be standardized across the project and follow well-defined guidelines,"[logging standard]
+[follow conventions]"
+G39,N1,"Group nodes and interfaces into cohesive sets, each of them with its own responsibilities and well-defined dependencies","[functional layers]
+[bundle custom nodes]
+[split planning and execution into separate interfaces]
+[minimum deps]"
+G43,N10,Take full advantage of existing packages in the ROS ecosystem and create your own package only when it is strictly needed.,"[reuse ros packages]
+[search ros packages all the time]
+[reuse packages]"
+G18,N2,Each ROS package should be responsible for one and only one specific feature of the system or robot capability and provide a well-defined interface for it,"[standard interface to work independently]
+[one behaviour one package]
+[each capability has its own metapackage]
+[one node per task]
+[decoupling from the core functionalities]
+[allow concurrent development via modularization]
+[adding/removing modules is simple]
+[separate motion generation from motion execution]
+[capability interfaces]"
+G9,N3,Decouple nodes with responsibilities that naturally work at different rates and use different rates for different purposes,"[global vs local planning]
+[fast traversal + reconfiguration]
+[diff rates for diff purposes]
+[separate computations on diff machines]
+[data sync with diff frequency]"
+G6,N4,"By design, limit unnecessary computationally-heavy operations by carefully analyzing the execution scenarios across ROS nodes","[avoid computing unnecessary collisions]
+[watchdog with 0-based placeholders]
+[selective submaps]
+[connect global and local maps]
+[run only required capabilities]
+[in-memory data and tree traversal on request]
+[no heavy comp for any msg]"
+G33,N5,Transform data only when it is used,[Transform data only when needed]
+G29,N6,Design each single node so that it is runnable (and testable) in isolation,"[offline mode for nodes]
+[testable in isolation]
+[easy mocking and testing]"
+G25,N7,Provide dedicated nodes for doing introspection and querying the lower levels of the system,"[dedicated nodes for lower levels]
+[introspection]
+[monitoring node for diagnostics]
+[runtime modifiable nodes]"
+G7,N8,"Use a dedicated node to store and represent globally-relevant data (e.g., the physical environment where the system operates) and use it as the single source of truth for all the other nodes in the system","[single node for global map]
+[single node acting as name server]
+[one costmap]
+[one central world model]"
+G40,N9,Keep the number of nodes as low as possible to support the basic execution scenarios and then extend the architecture for managing corner cases  ,"[reduce complexity]
+[overhead for suppoorting theoretical use cases]
+[good defaults]
+[scale the complexity to your team's skills]"
+G27,P1,"Avoid persisting raw data (e.g., a full resolution video) if only part of it will be used ",[persist only when needed - video specific]
+G36,P2,Pay special attention to race conditions when persisting data received from other ROS nodes within the system,[mutexes for race conditions]
+G37,P3,"Use a dedicated node for persisting and querying long-term data and short-term data (e.g., in the order of seconds) ","[long history in specialized node]
+[geometries in memory and then persisted]"
+G22,S1,ROS nodes should be resilient with respect to the amount and frequency of the data received by the sensors,"[estimate state asap]
+[run additonal instances of node for perf]
+[multiple instances for multirobots for perf]
+[avoid sync issues when network is lagging]
+[sync data sources with different rates]"
+G14,S2,Use different communication channels and different hardware depending on the criticality and real-time needs of the nodes,"[different comm channels for safety]
+[ros not for rt]"
+G10,S3,"For real-time requirements, collect timestamps from multiple sources (i.e., do not rely on ROS-based timestamps only) ","[time sycn with gps and clock server]
+[double timestamp]"
+G15,S4,Provide at least one globally-reachable node capable of receiving run-stop messages and stopping/resetting the whole system,"[runstop button]
+[the control loops of all robots stoppable all at once]
+[master disable and reset]"
+,,,[NA]

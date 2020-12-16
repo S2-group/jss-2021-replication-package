@@ -45,6 +45,7 @@ data_analysis
     |--- analysis.r                             The R script we used for generating the plots reported in the article
     |--- documentation_fragments.csv            Raw textual fragments extracted from the documentation of ROS-based systems, with full traceability information about which guideline it generates and the specific repository it is coming from
     |--- guidelines_definitions.csv             Raw data containing the guidelines defined during the analysis for answering RQ2 with additional data about how we solved conflicts, their computed usefulness, etc.
+    |--- thematic_map.csv             Raw data containing the thematic map between the raw code identified either in the GitHub repositories or in participants' responses and the guidelines (i.e., the themes).
 ```
 The data in the CSV files has been manually, collaboratively, and iteratively extracted by the authors of the paper. The steps for recreating the plots presented in the paper the list of contributors to contact for replicating this study are presented [here](./INSTALL.md). 
 
@@ -79,7 +80,8 @@ Interested researchers can fully rebuild/update the whole dataset by following t
 ```
 online_questionnaire
     .
-    |--- online_questionnaire.pdf                       Full transcript of the on-line questionnaire
+    |--- online_questionnaire.pdf                       Full transcript of the on-line questionnaire for contributors of repositories with architectural documentation
+    |--- online_questionnaire_no_sa_doc.pdf                       Full transcript of the on-line questionnaire for contributors of repositories without architectural documentation
 	|--- online_questionnaire_invitation_email.txt      Text of the email for inviting roboticists to participate to the on-line survey
 	|--- online_questionnaire_responses.csv             All the responses of the on-line questionnaire, including our classification and codes
 	|--- online_questionnaire_responses_raw.csv         Raw data containing all the responses of the on-line questionnaire, as it has been exported from the Google Drive spreadsheet
@@ -91,6 +93,8 @@ online_questionnaire
 	    |--- cloned_repos/                              Empty folder which will contain the cloned repositories
 	    |--- cloned_repos.csv                           The list of cloned repositories from which to extract the list of contributors
 	    |--- repos_to_clone.csv                         The list of repositories to clone
+	    |--- cloned_repos_no_sa_doc.csv                 The list of cloned repositories without SA documentation from which to extract the list of contributors
+	    |--- repos_to_clone_no_sa_doc.csv               The list of repositories without SA documentation to clone
 ```
 
 The steps for contacting the list of contributors of the targeted GitHub repositories are presented [here](./INSTALL.md). 
