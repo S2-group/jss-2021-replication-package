@@ -1,6 +1,6 @@
-# JSS 2020 – Replication package
+# JSS 2021 – Replication package
 
-Replication package of the paper titled "Mining Guidelines for Architecting Robotics Software" submitted to the International Journal of Systems and Software.
+Replication package of the paper titled "Mining Guidelines for Architecting Robotics Software" published at the International Journal of Systems and Software.
 
 This study has been designed, developed, and reported by the following investigators:
 
