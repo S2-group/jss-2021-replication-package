@@ -17,7 +17,17 @@ The full dataset including raw data, mining scripts, and analysis scripts produc
 If the dataset is helping your research, consider to cite it is as follows, thanks!
 
 ```
-TBD
+@article{JSS_ROS_2021,
+  title = {{Mining guidelines for architecting robotics software}},
+  journal = {Journal of Systems and Software},
+  volume = {178},
+  pages = {110969},
+  year = {2021},
+  issn = {0164-1212},
+  doi = {https://doi.org/10.1016/j.jss.2021.110969},
+  url = {https://www.sciencedirect.com/science/article/pii/S0164121221000662},
+  author = {Ivano Malavolta and Grace A. Lewis and Bradley Schmerl and Patricia Lago and David Garlan}
+}
 ```
 
 ### Overview of the replication package
